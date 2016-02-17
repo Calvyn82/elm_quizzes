@@ -60,7 +60,9 @@ Elm.Main.make = function (_elm) {
       _U.list([myStyle]),
       _U.list([A5(field,"text",address,String1,"First String",model.string1)
               ,A5(field,"text",address,String2,"Second String",model.string2)
-              ,A2($Html.div,_U.list([]),_U.list([$Html.text($Basics.toString(A2(setHamming,model.string1,model.string2)))]))
+              ,A2($Html.div,
+              _U.list([]),
+              _U.list([$Html.text(A2($Basics._op["++"],"Hamming distance is ",$Basics.toString(A2(setHamming,model.string1,model.string2))))]))
               ,A2($Html.div,_U.list([myStyle]),_U.list([validationMessage]))]));
    });
    var Model = F2(function (a,b) {    return {string1: a,string2: b};});

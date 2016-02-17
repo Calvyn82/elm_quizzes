@@ -41,7 +41,7 @@ view address model =
      div [myStyle]
        [ field "text" address String1 "First String" model.string1
        , field "text" address String2 "Second String" model.string2
-       , div [] [ text (toString (setHamming model.string1 model.string2))]
+       , div [] [ text ("Hamming distance is " ++ (toString (setHamming model.string1 model.string2)))]
        , div [myStyle] [validationMessage]
        ]
 
