@@ -11,72 +11,50 @@ Elm.Main.make = function (_elm) {
    $Html$Events = Elm.Html.Events.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
+   $Regex = Elm.Regex.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
    $StartApp$Simple = Elm.StartApp.Simple.make(_elm),
    $String = Elm.String.make(_elm);
    var _op = {};
-   var setHamming = F2(function (string1,string2) {
-      return _U.eq($String.length(string1),$String.length(string2)) ? $List.sum(A3($List.map2,
-      F2(function (a,b) {    return _U.eq(a,b) ? 0 : 1;}),
-      $String.toList(string1),
-      $String.toList(string2))) : 0;
-   });
+   var complement = function (dna) {
+      return A2($String.join,
+      "",
+      A2($List.map,
+      function (a) {
+         return $String.fromChar(a);
+      },
+      A2($List.map,
+      function (letter) {
+         return _U.eq(letter,_U.chr("C")) ? _U.chr("G") : _U.eq(letter,_U.chr("G")) ? _U.chr("C") : _U.eq(letter,_U.chr("T")) ? _U.chr("A") : _U.eq(letter,
+         _U.chr("A")) ? _U.chr("U") : _U.chr("!");
+      },
+      $String.toList($String.toUpper(dna)))));
+   };
    var myStyle = $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "width",_1: "100%"}
                                                 ,{ctor: "_Tuple2",_0: "height",_1: "40px"}
-                                                ,{ctor: "_Tuple2",_0: "padding",_1: "10px 0"}
-                                                ,{ctor: "_Tuple2",_0: "font-size",_1: "2em"}
+                                                ,{ctor: "_Tuple2",_0: "padding",_1: "5px 0"}
+                                                ,{ctor: "_Tuple2",_0: "font-size",_1: "1em"}
                                                 ,{ctor: "_Tuple2",_0: "text-align",_1: "center"}]));
-   var field = F5(function (fieldType,address,toAction,name,content) {
+   var view = F2(function (address,string) {
+      var validationMessage = A2($Regex.contains,$Regex.regex("^[cgatCGAT]+$"),string) ? A2($Html.span,
+      _U.list([$Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "color",_1: "green"}]))]),
+      _U.list([$Html.text("This is a valid DNA string.")])) : A2($Html.span,
+      _U.list([$Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "color",_1: "red"}]))]),
+      _U.list([$Html.text("Please enter a valid DNA string.")]));
       return A2($Html.div,
       _U.list([]),
-      _U.list([A2($Html.div,_U.list([myStyle]),_U.list([$Html.text(name)]))
-              ,A2($Html.input,
-              _U.list([$Html$Attributes.type$(fieldType)
-                      ,$Html$Attributes.placeholder(name)
-                      ,$Html$Attributes.value(content)
-                      ,A3($Html$Events.on,"input",$Html$Events.targetValue,function (string) {    return A2($Signal.message,address,toAction(string));})]),
-              _U.list([]))]));
-   });
-   var update = F2(function (action,model) {
-      var _p0 = action;
-      if (_p0.ctor === "String1") {
-            return _U.update(model,{string1: _p0._0});
-         } else {
-            return _U.update(model,{string2: _p0._0});
-         }
-   });
-   var String2 = function (a) {    return {ctor: "String2",_0: a};};
-   var String1 = function (a) {    return {ctor: "String1",_0: a};};
-   var view = F2(function (address,model) {
-      var validationMessage = _U.eq($String.length(model.string1),0) || _U.eq($String.length(model.string2),0) ? A2($Html.span,
-      _U.list([$Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "color",_1: "purple"}]))]),
-      _U.list([$Html.text("Please enter two strings")])) : _U.eq($String.length(model.string1),$String.length(model.string2)) ? A2($Html.span,
-      _U.list([$Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "color",_1: "green"}]))]),
-      _U.list([$Html.text("Strings are valid!")])) : A2($Html.span,
-      _U.list([$Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "color",_1: "red"}]))]),
-      _U.list([$Html.text("Strings must be the same length")]));
-      return A2($Html.div,
-      _U.list([myStyle]),
-      _U.list([A5(field,"text",address,String1,"First String",model.string1)
-              ,A5(field,"text",address,String2,"Second String",model.string2)
-              ,A2($Html.div,
-              _U.list([]),
-              _U.list([$Html.text(A2($Basics._op["++"],"Hamming distance is ",$Basics.toString(A2(setHamming,model.string1,model.string2))))]))
+      _U.list([A2($Html.input,
+              _U.list([$Html$Attributes.placeholder("Enter RNA here")
+                      ,$Html$Attributes.value(string)
+                      ,A3($Html$Events.on,"input",$Html$Events.targetValue,$Signal.message(address))
+                      ,myStyle]),
+              _U.list([]))
+              ,A2($Html.div,_U.list([myStyle]),_U.list([$Html.text(A2($Basics._op["++"],"The RNA complement is ",complement(string)))]))
               ,A2($Html.div,_U.list([myStyle]),_U.list([validationMessage]))]));
    });
-   var Model = F2(function (a,b) {    return {string1: a,string2: b};});
-   var emptyModel = A2(Model,"","");
-   var main = $StartApp$Simple.start({model: emptyModel,view: view,update: update});
-   return _elm.Main.values = {_op: _op
-                             ,main: main
-                             ,Model: Model
-                             ,emptyModel: emptyModel
-                             ,String1: String1
-                             ,String2: String2
-                             ,update: update
-                             ,view: view
-                             ,field: field
-                             ,myStyle: myStyle
-                             ,setHamming: setHamming};
+   var update = F2(function (newStr,oldStr) {    return newStr;});
+   var RNA = function (a) {    return {ctor: "RNA",_0: a};};
+   var main = $StartApp$Simple.start({model: "",view: view,update: update});
+   return _elm.Main.values = {_op: _op,main: main,RNA: RNA,update: update,view: view,myStyle: myStyle,complement: complement};
 };

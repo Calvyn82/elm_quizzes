@@ -13,8 +13,7 @@ Elm.Repl.make = function (_elm) {
    $String = Elm.String.make(_elm);
    var _op = {};
    var tsol = {ctor: "_Tuple0"};
-   var string2 = "aaa";
-   var string1 = "aba";
-   var deltron3030 = $List.sum(A3($List.map2,F2(function (a,b) {    return _U.eq(a,b) ? 0 : 1;}),$String.toList(string1),$String.toList(string2)));
-   return _elm.Repl.values = {_op: _op,deltron3030: deltron3030,string1: string1,string2: string2,tsol: tsol};
+   var l = $String.toList("AB");
+   var deltron3030 = $String.toList("AABBC");
+   return _elm.Repl.values = {_op: _op,deltron3030: deltron3030,l: l,tsol: tsol};
 };
